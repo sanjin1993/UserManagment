@@ -19,6 +19,8 @@ namespace Books.API.Profiles
 
             CreateMap<UserCreationDto, User>();
 
+            CreateMap<User, UserUpdateDto>().ReverseMap();
+
         }
     }
 }

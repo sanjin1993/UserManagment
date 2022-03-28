@@ -24,6 +24,7 @@ namespace UserManagment.API.Services
         Task Insert(User user);
         void Delete(User user);
 
+        void Update(User user);
         Task<bool> SaveChangesAsync();
 
     }

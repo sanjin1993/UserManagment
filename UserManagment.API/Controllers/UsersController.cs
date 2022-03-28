@@ -104,6 +104,32 @@ namespace Books.API.Controllers
             return CreatedAtRoute("GetUser", new { userId = userToReturn.Id },userToReturn);
         }
 
+
+        [HttpPut("{userId}")]
+        public async Task<IActionResult> UpdateUser(Guid userId, [FromBody] UserUpdateDto userDTO)
+        {
+            if (!ModelState.IsValid || Guid.Empty == userId )
+            {
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateUser)}");
+                return BadRequest(ModelState);
+            }
+
+            var userFromRepo = await _userRepository.GetUser(userId);
+
+            if (userFromRepo == null)
+            {
+                _logger.LogError($"Invalid UPDATE attempt in {nameof(UpdateUser)}");
+                return BadRequest("Submitted data is invalid");
+            }
+
+            _mapper.Map(userDTO, userFromRepo);
+
+            _userRepository.Update(userFromRepo);
+            await _userRepository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
         [HttpDelete("{userId}")]
 
         public async Task<IActionResult> DeleteUser(Guid userId)

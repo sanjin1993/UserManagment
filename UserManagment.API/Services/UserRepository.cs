@@ -160,5 +160,10 @@ namespace Books.API.Services
             }
         }
 
+        public void Update(User user)
+        {
+            _context.Users.Attach(user);
+            _context.Entry(user).State = EntityState.Modified;
+        }
     }
 }
