@@ -14,13 +14,11 @@ namespace Books.API.Profiles
         {
             CreateMap<User,UserDto>()
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
-            .ForMember(dto => dto.Permissions, c => c.MapFrom(c => string.Join(",",c.UserPermissions.Select(cs => cs.Permission.Code))));
+            .ForMember(dto => dto.Permissions, c => c.MapFrom(c => string.Join(",",c.UserPermissions.Select(cs => cs.Permission.Code))))
+            .ReverseMap();
 
             CreateMap<UserCreationDto, User>();
 
-            //CreateMap<Entities.Book, Models.Book>()
-            //    .ForMember(dest => dest.Author, opt => opt.MapFrom(src =>
-            //        $"{src.Author.FirstName} {src.Author.LastName}"));
         }
     }
 }

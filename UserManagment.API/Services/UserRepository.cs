@@ -33,187 +33,6 @@ namespace Books.API.Services
             _query = _context.Set<User>();
         }
 
-
-        //public async Task<IEnumerable<BookCover>> DownloadBookCoversAsync(Guid bookId) 
-        //{
-        //    var bookCoverUrls = new[]
-        //    {
-        //     $"http://localhost:52644/api/bookcovers/{bookId}-dummycover1",
-        //     $"http://localhost:52644/api/bookcovers/{bookId}-dummycover2"
-        //    };
-
-        //    var bookCovers = new List<BookCover>();
-        //    var downloadTask1 = DownloadBookCoverAsync(bookCoverUrls[0], bookCovers);
-        //    var downloadTask2 = DownloadBookCoverAsync(bookCoverUrls[1], bookCovers);
-        //    await Task.WhenAll(downloadTask1, downloadTask2);
-        //    return bookCovers;
-        //}
-
-        //private async Task DownloadBookCoverAsync(string bookCoverUrl, List<BookCover> bookCovers)
-        //{
-        //    var response = await _httpClient.GetAsync(bookCoverUrl);
-        //    var bookCover = JsonSerializer.Deserialize<BookCover>(
-        //         await response.Content.ReadAsStringAsync(),
-        //         new JsonSerializerOptions
-        //         {
-        //             PropertyNameCaseInsensitive = true,
-        //         });
-
-        //    bookCovers.Add(bookCover);
-        //}
-
-        //public async Task<Book> GetBookAsync(Guid id)
-        //{
-        //    //var pageCalculator = new Books.Legacy.ComplicatedPageCalculator();
-        //    //var amountOfPages = pageCalculator.CalculateBookPages();
-        //    _logger.LogInformation($"ThreadId when entering GetBookAsync: " +
-        //        $"{System.Threading.Thread.CurrentThread.ManagedThreadId}");
-
-        //    return await _context.Books
-        //        .Include(b => b.Author).FirstOrDefaultAsync(b => b.Id == id);
-        //}
-
-        //public IEnumerable<Book> GetBooks()
-        //{
-        //    _context.Database.ExecuteSqlRaw("WAITFOR DELAY '00:00:02';");
-        //    return _context.Books.Include(b => b.Author).ToList();
-        //}
-
-        //public async Task<IEnumerable<Book>> GetBooksAsync()
-        //{
-        //    await _context.Database.ExecuteSqlRawAsync("WAITFOR DELAY '00:00:02';");
-        //    return await _context.Books.Include(b => b.Author).ToListAsync();
-        //}
-
-        //public async Task<IEnumerable<Entities.Book>> GetBooksAsync(
-        //    IEnumerable<Guid> bookIds)
-        //{
-        //    return await _context.Books.Where(b => bookIds.Contains(b.Id))
-        //        .Include(b => b.Author).ToListAsync();
-        //}
-
-        //public async Task<BookCover> GetBookCoverAsync(string coverId)
-        //{
-        //    var httpClient = _httpClientFactory.CreateClient();
-        //    // pass through a dummy name
-        //    var response = await httpClient
-        //           .GetAsync($"http://localhost:52644/api/bookcovers/{coverId}");
-        //    if (response.IsSuccessStatusCode)
-        //    { 
-        //        return JsonSerializer.Deserialize<BookCover>(
-        //            await response.Content.ReadAsStringAsync(),
-        //            new JsonSerializerOptions
-        //            {
-        //                PropertyNameCaseInsensitive = true,
-        //            });
-        //    }
-
-        //    return null;
-        //}
-
-        //private async Task<BookCover> DownloadBookCoverAsync(
-        //    HttpClient httpClient, string bookCoverUrl, 
-        //    CancellationToken cancellationToken)
-        //{
-        //    //throw new Exception("Cannot download book cover, " +
-        //    //    "writer isn't finishing book fast enough.");
-
-        //    var response = await httpClient
-        //               .GetAsync(bookCoverUrl, cancellationToken);
-
-        //    if (response.IsSuccessStatusCode)
-        //    {
-        //        var bookCover = JsonSerializer.Deserialize<BookCover>(
-        //            await response.Content.ReadAsStringAsync(),
-        //            new JsonSerializerOptions
-        //            {
-        //                PropertyNameCaseInsensitive = true,
-        //            });
-        //        return bookCover;
-        //    }
-
-        //    _cancellationTokenSource.Cancel();
-        //    return null;
-        //}
-
-
-        //public async Task<IEnumerable<BookCover>> GetBookCoversAsync(Guid bookId)
-        //{
-        //    var httpClient = _httpClientFactory.CreateClient();
-        //    var bookCovers = new List<BookCover>();
-        //    _cancellationTokenSource = new CancellationTokenSource();
-
-        //    // create a list of fake bookcovers
-        //    var bookCoverUrls = new[]
-        //    {
-        //        $"http://localhost:52644/api/bookcovers/{bookId}-dummycover1",
-        //        // $"http://localhost:52644/api/bookcovers/{bookId}-dummycover2?returnFault=true",
-        //        $"http://localhost:52644/api/bookcovers/{bookId}-dummycover2",
-        //        $"http://localhost:52644/api/bookcovers/{bookId}-dummycover3",
-        //        $"http://localhost:52644/api/bookcovers/{bookId}-dummycover4",
-        //        $"http://localhost:52644/api/bookcovers/{bookId}-dummycover5"
-        //    };
-
-        //    // create the tasks
-        //    var downloadBookCoverTasksQuery =
-        //         from bookCoverUrl
-        //         in bookCoverUrls
-        //         select DownloadBookCoverAsync(httpClient, bookCoverUrl,
-        //         _cancellationTokenSource.Token);
-
-        //    // start the tasks
-        //    var downloadBookCoverTasks = downloadBookCoverTasksQuery.ToList();
-        //    try
-        //    {       
-        //        return await Task.WhenAll(downloadBookCoverTasks);
-        //    }
-        //    catch (OperationCanceledException operationCanceledException)
-        //    {
-        //        _logger.LogInformation($"{operationCanceledException.Message}");
-        //        foreach (var task in downloadBookCoverTasks)
-        //        {
-        //            _logger.LogInformation($"Task {task.Id} has status {task.Status}");
-        //        }
-
-        //        return new List<BookCover>();
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        _logger.LogError($"{exception.Message}");
-        //        throw;
-        //    }
-
-        //    //foreach (var bookCoverUrl in bookCoverUrls)
-        //    //{
-        //    //    var response = await httpClient
-        //    //       .GetAsync(bookCoverUrl);
-
-        //    //    if (response.IsSuccessStatusCode)
-        //    //    {
-        //    //        bookCovers.Add(JsonSerializer.Deserialize<BookCover>(
-        //    //            await response.Content.ReadAsStringAsync(),
-        //    //            new JsonSerializerOptions
-        //    //            {
-        //    //                PropertyNameCaseInsensitive = true,
-        //    //            }));
-        //    //    }
-        //    //}
-
-        //    //return bookCovers;
-        //}
-
-        //public void AddBook(Book bookToAdd)
-        //{
-        //    if (bookToAdd == null)
-        //    {
-        //        throw new ArgumentNullException(nameof(bookToAdd));
-        //    }
-
-        //    _context.Add(bookToAdd);
-        //}
-
-
-
         public async Task<IEnumerable<User>> GetAllUsersAsync()
         {
             return await _context.Users.Include(u => u.UserPermissions)
@@ -229,7 +48,7 @@ namespace Books.API.Services
                                          .ToPagedListAsync(userParams.PageNumber, userParams.PageSize);
         }
 
-        public async Task<IPagedList<User>> SearchUsersAsync(Expression<Func<User, bool>> expression = null,  UserRequestParams userParams = null)
+        public async Task<IPagedList<User>> SearchUsersAsync(Expression<Func<User, bool>> expression = null, UserRequestParams userParams = null)
         {
             IQueryable<User> query = _query;
 
@@ -238,13 +57,15 @@ namespace Books.API.Services
                 query = query.Where(expression);
             }
 
-            if (userParams.OrderBy != null)
-            {
-                ApplySort(ref query, userParams.OrderBy);
-            }
+            //if (userParams.OrderBy != null)
+            //{
+            //    ApplySort(ref query, userParams.OrderBy);
+            //}
 
             return await query.Include(u => u.UserPermissions)
-                        .ThenInclude(p => p.Permission).AsNoTracking().ToPagedListAsync(userParams.PageNumber, userParams.PageSize);
+                              .ThenInclude(p => p.Permission)
+                              .AsNoTracking()
+                              .ToPagedListAsync(userParams.PageNumber, userParams.PageSize);
         }
 
         private void ApplySort(ref IQueryable<User> users, string orderByQueryString)
@@ -276,7 +97,37 @@ namespace Books.API.Services
                 users = users.OrderBy(x => x.FirstName);
                 return;
             }
-            users = users.OrderBy(x => orderQuery);
+            //users = users.OrderBy(orderQuery);
+        }
+
+        public async Task Insert(User user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+            await _context.AddAsync(user);
+        }
+
+        public async Task<User> GetUser(Guid userId)
+        {
+            if (userId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(userId));
+            }
+
+            return await _context.Users
+              .Where(c => c.Id == userId).FirstOrDefaultAsync();
+        }
+
+        public void Delete(User user)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            _context.Users.Remove(user);
         }
 
         public async Task<bool> SaveChangesAsync()
@@ -309,6 +160,5 @@ namespace Books.API.Services
             }
         }
 
-        
     }
 }

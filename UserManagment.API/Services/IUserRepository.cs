@@ -19,13 +19,12 @@ namespace UserManagment.API.Services
            Expression<Func<User, bool>> expression = null,
            UserRequestParams userParams = null
         );
+        Task<User> GetUser(Guid userId);
 
-        //Task<User> GetBookAsync(Guid id);
+        Task Insert(User user);
+        void Delete(User user);
 
-        //Task<IEnumerable<User>> GetBooksAsync(IEnumerable<Guid> userIds);
+        Task<bool> SaveChangesAsync();
 
-        //void AddBook(User userToAdd);
-
-        //Task<bool> SaveChangesAsync();
     }
 }

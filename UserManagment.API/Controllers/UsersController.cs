@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Books.API.Entities;
 using Books.API.Filters;
 using Books.API.Services;
 using Microsoft.AspNetCore.Mvc;
@@ -56,6 +57,21 @@ namespace Books.API.Controllers
             return Ok(users);
         }
 
+        [HttpGet("{userId}", Name = "GetUser")]
+        [UserResultFilter]
+
+        public async Task<IActionResult> GetUser(Guid userId)
+        {
+            var userFromRepo = await _userRepository.GetUser(userId);
+
+            if (userFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(_mapper.Map<UserDto>(userFromRepo));
+        }
+
         [HttpGet]
         [Route("SearchUsers")]
         [UsersResultFilter]
@@ -73,6 +89,42 @@ namespace Books.API.Controllers
 
             return Ok( await _userRepository.GetUsersAsync(request));
 
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CreateUser([FromBody] UserCreationDto user)
+        {
+            var userToAdd = _mapper.Map<User>(user);
+
+            await _userRepository.Insert(userToAdd);
+            await _userRepository.SaveChangesAsync();
+
+            var userToReturn = _mapper.Map<UserDto>(userToAdd);
+
+            return CreatedAtRoute("GetUser", new { userId = userToReturn.Id },userToReturn);
+        }
+
+        [HttpDelete("{userId}")]
+
+        public async Task<IActionResult> DeleteUser(Guid userId)
+        {
+            if (Guid.Empty == userId)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteUser)}");
+                return BadRequest();
+            }
+            var userFromRepo = await _userRepository.GetUser(userId);
+
+            if (userFromRepo == null)
+            {
+                _logger.LogError($"Invalid DELETE attempt in {nameof(DeleteUser)}");
+                return BadRequest("Submitted data is invalid");
+            }
+
+            _userRepository.Delete(userFromRepo);
+            await _userRepository.SaveChangesAsync();
+
+            return NoContent();
         }
 
     }
