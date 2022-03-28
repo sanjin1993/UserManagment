@@ -49,6 +49,7 @@ namespace Books.API
             services.AddDbContext<UserManagmentContext>(o => o.UseSqlServer(connectionString));
 
             services.AddScoped<IUserRepository, UserRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 

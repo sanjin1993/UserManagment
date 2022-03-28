@@ -27,5 +27,7 @@ namespace UserManagment.API.Services
         void Update(User user);
         Task<bool> SaveChangesAsync();
 
+        bool UserExists(Guid userId);
+
     }
 }

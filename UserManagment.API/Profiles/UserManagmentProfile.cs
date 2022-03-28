@@ -16,10 +16,10 @@ namespace Books.API.Profiles
             .ForMember(dest => dest.FullName, opt => opt.MapFrom(src => $"{src.FirstName} {src.LastName}"))
             .ForMember(dto => dto.Permissions, c => c.MapFrom(c => string.Join(",",c.UserPermissions.Select(cs => cs.Permission.Code))))
             .ReverseMap();
-
             CreateMap<UserCreationDto, User>();
-
             CreateMap<User, UserUpdateDto>().ReverseMap();
+
+            CreateMap<Permission, PermissionDto>().ReverseMap();
 
         }
     }

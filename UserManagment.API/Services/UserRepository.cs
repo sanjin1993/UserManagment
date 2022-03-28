@@ -165,5 +165,10 @@ namespace Books.API.Services
             _context.Users.Attach(user);
             _context.Entry(user).State = EntityState.Modified;
         }
+
+        public bool UserExists(Guid userId)
+        {
+            return _context.Users.Any(u => u.Id == userId);
+        }
     }
 }

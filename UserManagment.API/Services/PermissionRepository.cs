@@ -1,4 +1,6 @@
 ﻿using Books.API.Contexts;
+using Books.API.Entities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
@@ -43,6 +45,47 @@ namespace UserManagment.API.Services
                     _cancellationTokenSource = null;
                 }
             }
+        }
+
+        public async Task<bool> SaveChangesAsync()
+        {
+            // return true if 1 or more entities were changed
+            return (await _context.SaveChangesAsync() > 0);
+        }
+
+        public async Task<IEnumerable<Permission>> GetPermissionsForUser(Guid userId)
+        {
+            return await _context.UserPermissions.Where(p => p.UserId == userId).Select(u => u.Permission).ToListAsync();
+        }
+
+        public async Task Insert(Guid UserId, Guid PermissionId)
+        {
+            if (UserId == Guid.Empty || PermissionId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(Insert));
+            }
+            await _context.AddAsync(new UserPermission { PermissionId = PermissionId, UserId = UserId });
+        }
+
+        public void Delete(Permission permission)
+        {
+            if (permission == null)
+            {
+                throw new ArgumentNullException(nameof(permission));
+            }
+
+            _context.Permissions.Remove(permission);
+        }
+
+        public async Task<Permission> GetPermission(Guid permissionId)
+        {
+            if (permissionId == Guid.Empty)
+            {
+                throw new ArgumentNullException(nameof(permissionId));
+            }
+
+            return await _context.Permissions
+              .Where(p => p.Id == permissionId).FirstOrDefaultAsync();
         }
     }
 }
